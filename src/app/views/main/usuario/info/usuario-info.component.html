@@ -1,0 +1,65 @@
+<div class="ui-s600">
+    <ui-card class="elevate-on-toolbar">
+        <ui-toolbar class="flat">
+            <button class="ui-button flat icon" uiRipple>
+                <i class="material-icons">arrow_back</i>
+            </button>
+            <span class="title">Cadastro de usuário</span>
+        </ui-toolbar>
+
+        <ui-card-content>
+            <form #formUsuario="ngForm" class="ui-validate on-dirty on-submit">
+                <ui-option-container class="v-space-4 b-space-16 edited-component">
+                    <div class="info">
+                        Tipo de usuário
+                    </div>
+                    <ui-option>
+                        <input type="radio" name="tipoUsuario" [(ngModel)]="info.tipoUsuario" [value]="1">
+                        <span>Aluno</span>
+                    </ui-option>
+                    <ui-option>
+                        <input type="radio" name="tipoUsuario" [(ngModel)]="info.tipoUsuario" [value]="2">
+                        <span>Professor</span>
+                    </ui-option>
+                </ui-option-container>
+                <ui-input-container>
+                    <input #campoNome="ngModel" type="text" [(ngModel)]="info.nome" name="campoNome" uiInput required uiMaxlength="70">
+                    <label>Nome</label>
+                    <div class="ui-messages">
+                        <div *ngIf="campoNome.errors && campoNome.dirty">
+                            <div class="ui-message error" [hidden]="!campoNome.pristine && !campoNome.errors.required">Nome é obrigatório
+                            </div>
+                            <div class="ui-message error" [hidden]="!campoNome.errors.uiMaxlength">Nome não pode conter mais de 70 caracteres.
+                            </div>
+                        </div>
+                        <div class="ui-message counter" [ngClass]="{'error': info.nome && info.nome.length > 70}">
+                            {{info.nome ? info.nome.length : 0}}/70
+                        </div>
+                    </div>
+                </ui-input-container>
+
+                <ui-input-container>
+                    <input #campoEmail="ngModel" type="text" [(ngModel)]="info.email" name="campoEmail" uiInput required uiMaxlength="252">
+                    <label>Email</label>
+                    <div class="ui-messages">
+                        <div *ngIf="campoEmail.errors && campoEmail.dirty">
+                            <div class="ui-message error" [hidden]="!campoEmail.pristine && !campoEmail.errors.required">Email é obrigatório
+                            </div>
+                            <div class="ui-message error" [hidden]="!campoEmail.errors.uiMaxlength">Email não pode conter mais de 252 caracteres.
+                            </div>
+                        </div>
+                        <div class="ui-message counter" [ngClass]="{'error': info.email && info.email.length > 252}">
+                            {{info.email ? info.email.length : 0}}/252
+                        </div>
+                    </div>
+                </ui-input-container>
+
+                <div class="ui-fab-container">
+                    <button class="ui-button accent fab" uiRipple>
+                        <i class="material-icons">save</i>
+                    </button>
+                </div>
+            </form>
+        </ui-card-content>
+    </ui-card>
+</div>
