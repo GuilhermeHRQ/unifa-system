@@ -4,15 +4,15 @@
             <tbody #elementInsert>
                 <tr>
                     <th>
-                        ID
+                        Código
                     </th>
                     <th>
                         Nome
                     </th>
                 </tr>
-                <!-- <tr class="empty" *ngIf="!corretoras || !corretoras.length">
-                    <td colspan="2">{{loading ? 'Carregando...' : 'Nenhuma corretora encontrada'}}</td>
-                </tr> -->
+                <tr class="empty" *ngIf="!listaProfessores.size()">
+                    <td colspan="2">{{loading ? 'Carregando...' : 'Nenhum professor cadastrado'}}</td>
+                </tr>
             </tbody>
             <tfoot>
                 <!-- <tr>
@@ -34,7 +34,7 @@
         </ui-data-table>
     </ui-card>
     <div class="ui-fab-container">
-        <button class="ui-button accent fab" uiRipple>
+        <button class="ui-button accent fab" uiRipple [routerLink]="['novo']">
             <i class="material-icons">add</i>
         </button>
     </div>

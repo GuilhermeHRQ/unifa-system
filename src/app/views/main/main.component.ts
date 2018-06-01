@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Title } from "@angular/platform-browser";
+import { Title } from '@angular/platform-browser';
 import { UiCookie, UiToolbarService, UiColor } from 'ng-smn-ui';
-import { UserService } from "../../core/utils/user/user.service";
-import { Router } from "@angular/router";
+import { UserService } from '../../core/utils/user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-main',
@@ -29,7 +29,8 @@ export class MainComponent implements OnInit, AfterViewInit {
             url: 'url',
             name: 'nome'
         };
-        this.menu = UserService.getMenu();
+
+        this.menu = this.getMenu();
         this.user = UserService.getUser();
     }
 
@@ -58,5 +59,16 @@ export class MainComponent implements OnInit, AfterViewInit {
     logoff() {
         UserService.remove();
         this.router.navigate(['/login']);
+    }
+
+    getMenu() {
+        return [
+            {
+                id: 1,
+                parentId: null,
+                url: '/professor',
+                name: 'Professores'
+            }
+        ];
     }
 }

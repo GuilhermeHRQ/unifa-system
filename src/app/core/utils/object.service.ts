@@ -72,7 +72,7 @@ export class ObjectService {
         Referencia: https://www.w3schools.com/js/js_json_parse.asp
     */
 
-    public toObject(JSONString): Object {
+    public toObject(JSONString): any {
         if (typeof JSONString === 'string') {
             return JSON.parse(JSONString);
         }

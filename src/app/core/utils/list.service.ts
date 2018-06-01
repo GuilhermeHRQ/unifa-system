@@ -152,8 +152,16 @@ export class ListService {
         return this.length;
     }
 
+    setSize(newSize: number) {
+        this.length = newSize;
+    }
+
     getHead(): any {
         return this.head;
+    }
+
+    setHead(newHead: any): void {
+        this.head = newHead;
     }
 
     // toString() {

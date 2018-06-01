@@ -3,12 +3,12 @@ import { Title } from '@angular/platform-browser';
 import { UiToolbarService } from 'ng-smn-ui';
 
 @Component({
-    selector: 'usuario-component',
-    templateUrl: 'usuario.component.html',
+    selector: 'professor-component',
+    templateUrl: 'professor.component.html',
     styleUrls: []
 })
 
-export class UsuarioComponent implements OnInit {
+export class ProfessorComponent implements OnInit {
 
     constructor(
         private titleService: Title,
@@ -16,7 +16,7 @@ export class UsuarioComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.titleService.setTitle('Usuarios');
-        this.toolbarService.set('Usuario');
+        this.titleService.setTitle('Professores');
+        this.toolbarService.set('Professores');
     }
 }

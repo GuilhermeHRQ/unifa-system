@@ -5,19 +5,19 @@ import { ObjectService } from '../../../../core/utils/object.service';
 import { StorageService } from '../../../../core/utils/storage.service';
 
 @Component({
-    selector: 'usuario-info-component',
-    templateUrl: 'usuario-info.component.html',
-    styleUrls: ['usuario-info.component.scss']
+    selector: 'professor-info-component',
+    templateUrl: 'professor-info.component.html',
+    styleUrls: ['professor-info.component.scss']
 })
 
-export class UsuarioInfoComponent implements OnInit, OnDestroy {
+export class ProfessorInfoComponent implements OnInit, OnDestroy {
     info: any;
     constructor(
         private titleService: Title,
         private toolbarService: UiToolbarService,
         private objectService: ObjectService,
         private storageService: StorageService
-    ) { 
+    ) {
         this.info = {};
     }
 
