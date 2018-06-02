@@ -145,15 +145,44 @@ export class ListService {
             }
             return -1;
         }
+    }
 
+    contains(key, value) {
+        let index = 0;
+        if (this.head.element[key] == value) {
+            return {
+                element: this.head.element,
+                index: index
+            }
+        } else {
+            let current = this.head;
+            while (current.next) {
+                current = current.next;
+                index++;
+                if (current.element[key] == value) {
+                    return {
+                        element: current.element,
+                        index: index
+                    }
+                }
+            }
+        }
+
+        console.error('Nada foi encontrado');
+        return null;
     }
 
     size(): number {
         return this.length;
     }
 
-    setSize(newSize: number) {
-        this.length = newSize;
+    setSize() {
+        this.length = 1;
+        let current = this.head;
+        while (current.next) {
+            this.length++;
+            current = current.next
+        }
     }
 
     getHead(): any {
@@ -163,14 +192,4 @@ export class ListService {
     setHead(newHead: any): void {
         this.head = newHead;
     }
-
-    // toString() {
-    //     let current = head;
-    //     let string = '';
-    //     while (current) {
-    //         string += current.element + (current.next ? ', ' : '');
-    //         current = current.next;
-    //     }
-    //     return string;
-    // }
 }

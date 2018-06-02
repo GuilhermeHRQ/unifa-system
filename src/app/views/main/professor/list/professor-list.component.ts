@@ -31,17 +31,7 @@ export class ProfessorListComponent implements OnInit {
         this.toolbarService.activateExtendedToolbar(480);
 
         this.listaProfessores = new ListService();
-        const objectStorage = this.objectService.toObject(this.storageService.getItem('professores'));
-        if (objectStorage) {
-            this.listaProfessores.setHead(objectStorage.head);
-            this.listaProfessores.setSize(objectStorage.length);
-        }
-
-        console.log(this.listaProfessores);
-        // this.listaProfessores.append({ id: 20245, nome: 'José' });
-        // this.listaProfessores.append({ id: 22024, nome: 'Adre' });
-        // this.listaProfessores.append({ id: 20243, nome: 'Maria' });
-        // console.log(JSON.stringify(this.listaProfessores));
+        this.getInfo();
         this.initList(this.listaProfessores);
     }
 
@@ -51,8 +41,8 @@ export class ProfessorListComponent implements OnInit {
 
 
         for (let i = 0; i < length; i++) {
-            const node = `<tr class="item-list" data-id="${itemList.element.id}">
-            <td data-title="Código" class="no-wrap">${itemList.element.id}</td>
+            const node = `<tr class="item-list" data-id="${itemList.element.codigo}">
+            <td data-title="Código" class="no-wrap">${itemList.element.codigo}</td>
             <td data-title="Nome" class="no-wrap">${itemList.element.nome}</td>
             </tr>`;
             this.elementInsert.nativeElement.innerHTML += node;
@@ -69,6 +59,15 @@ export class ProfessorListComponent implements OnInit {
                 this.router.navigate(['professor/' + e.target.parentElement.dataset.id]);
             });
         });
+    }
+
+    getInfo() {
+        const storage = this.storageService.getItem('professores');
+        if (storage) {
+            const objectStorage = JSON.parse(storage);
+            this.listaProfessores.setHead(objectStorage);
+            this.listaProfessores.setSize();
+        }
     }
 }
 
