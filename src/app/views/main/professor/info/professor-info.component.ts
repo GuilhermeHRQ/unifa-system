@@ -44,11 +44,10 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
             const res = this.listaProfessores.contains('codigo', this.activedRoute.snapshot.params['id']);
             this.info = res.element;
             this.index = res.index;
-            this.info.codigo = parseInt(this.info.codigo);
+            this.info.codigo = parseInt(this.info.codigo, 10);
         } else {
             setTimeout(() => {
                 this.addingNew = true;
-                // this.loading = false;
             });
         }
     }
@@ -70,14 +69,22 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
             return false;
         }
 
+        if (!this.addingNew) {
+            this.listaProfessores.remove(this.listaProfessores.contains('codigo', this.info.codigo).index);
+        }
+
         this.listaProfessores.append(this.info);
+
         const head = this.listaProfessores.getHead();
         this.storageService.setNewItem('professores', JSON.stringify(head));
 
         UiSnackbar.show({
-            text: 'Professor cadastrado com sucesso!'
+            text: 'Professor ' + (this.addingNew ? 'cadastrado' : 'alterado') + ' com sucesso!'
         });
+
         this.router.navigate(['professor']);
+
+
     }
 
     getLista() {
