@@ -27,12 +27,11 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
         private activedRoute: ActivatedRoute,
     ) {
         this.info = {};
-        this.index = 0;
     }
 
     ngOnInit() {
-        this.titleService.setTitle('UnifaSytem - Usuário');
-        this.toolbarService.set('Cadastro de usuário');
+        this.titleService.setTitle('UnifaSytem - Professor');
+        this.toolbarService.set('Cadastro de Professor');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaProfessores = new ListService();
         this.getLista();
@@ -103,7 +102,8 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
 
         UiSnackbar.show({
             text: 'Professor removido com sucesso'
-        })
+        });
+
         this.router.navigate(['professor']);
     }
 }
