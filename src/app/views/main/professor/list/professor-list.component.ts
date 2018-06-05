@@ -41,8 +41,8 @@ export class ProfessorListComponent implements OnInit {
 
 
         for (let i = 0; i < length; i++) {
-            const node = `<tr class="item-list" data-id="${itemList.element.codigo}">
-            <td data-title="Código" class="no-wrap">${itemList.element.codigo}</td>
+            const node = `<tr class="item-list" data-id="${itemList.element.cpf}">
+            <td data-title="Código" class="no-wrap">${this.convertCpf(itemList.element.cpf)}</td>
             <td data-title="Nome" class="no-wrap">${itemList.element.nome}</td>
             </tr>`;
             this.elementInsert.nativeElement.innerHTML += node;
@@ -68,6 +68,28 @@ export class ProfessorListComponent implements OnInit {
             this.listaProfessores.setHead(objectStorage);
             this.listaProfessores.setSize();
         }
+    }
+
+    convertCpf(value: any): any {
+        if (!value) {
+            return '';
+        }
+
+        value = value.toString().replace(/[^0-9]+/g, '');
+        if (value.length > 3) {
+            value = value.substring(0, 3) + '.' + value.substring(3);
+        }
+        if (value.length > 7) {
+            value = value.substring(0, 7) + '.' + value.substring(7);
+        }
+        if (value.length > 11) {
+            value = value.substring(0, 11) + '-' + value.substring(11);
+        }
+        if (value.length > 14) {
+            value = value.substring(0, 14);
+        }
+
+        return value;
     }
 }
 

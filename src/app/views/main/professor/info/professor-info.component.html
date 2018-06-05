@@ -16,19 +16,6 @@
             <form #formProfessor="ngForm" class="ui-validate on-dirty on-submit" (submit)="onSubmit(formProfessor)">
                 <div class="ui-flex-container breake-on-s600">
                     <ui-input-container>
-                        <input #campoCodigo="ngModel" type="text" [(ngModel)]="info.codigo" name="campoCodigo" uiInput required uiMaskInteger>
-                        <label>Código</label>
-                        <div class="ui-messages">
-                            <div *ngIf="campoCodigo.errors && campoCodigo.dirty">
-                                <div class="ui-message error" [hidden]="!campoCodigo.pristine && !campoCodigo.errors.required">Código é obrigatório
-                                </div>
-                                <div class="ui-message error" [hidden]="!campoCodigo.errors.parse">Informe um código válido
-                                </div>
-                            </div>
-                        </div>
-                    </ui-input-container>
-
-                    <ui-input-container>
                         <input #campoCpf="ngModel" type="text" [(ngModel)]="info.cpf" name="campoCpf" uiInput required uiMaskCpf>
                         <label>CPF</label>
                         <div class="ui-messages">
@@ -38,6 +25,27 @@
                                 <div class="ui-message error" [hidden]="!campoCpf.errors.parse">Informe um CPF válido
                                 </div>
                             </div>
+                        </div>
+                    </ui-input-container>
+
+                    <ui-input-container>
+                        <input type="text" uiInput [(ngModel)]="info.dataNascimento" name="date" [uiDatePicker]="'dataNascimento'" uiMaskDate #DataNascimento="ngModel"
+                            required>
+                        <label>Data de Nascimento</label>
+                        <div class="ui-messages">
+                            <div *ngIf="campoNome.errors && campoNome.dirty">
+                                <div class="ui-message error" [hidden]="!campoNome.pristine && !campoNome.errors.required">
+                                    Data de nascimento é obrigatória
+                                </div>
+                                <div class="ui-message error" [hidden]="!campoNome.pristine && !campoNome.errors.parse">
+                                    Informe uma data válida
+                                </div>
+                            </div>
+                        </div>
+                        <div class="icon">
+                            <button class="ui-button icon flat" [uiDatePickerCaller]="'dataNascimento'" type="button">
+                                <i class="material-icons">today</i>
+                            </button>
                         </div>
                     </ui-input-container>
                 </div>
@@ -73,6 +81,121 @@
                         </div>
                     </div>
                 </ui-input-container>
+
+                <ui-input-container>
+                    <input #campoSalario="ngModel" type="text" [(ngModel)]="info.salario" name="campoSalario" uiInput required uiMaskCurrency>
+                    <label>Salário</label>
+                    <div class="ui-messages">
+                        <div *ngIf="campoSalario.errors && campoSalario.dirty">
+                            <div class="ui-message error" [hidden]="!campoSalario.pristine && !campoSalario.errors.required">
+                                Salário é obrigatório
+                            </div>
+                        </div>
+                    </div>
+                </ui-input-container>
+
+                <ui-subheader>Endereço</ui-subheader>
+
+                <div class="ui-flex-container break-on-s600">
+                    <ui-input-container>
+                        <input #campoCepCartao="ngModel" type="text" [(ngModel)]="info.cep" uiInput name="campoCepCartao" uiMaskCep required>
+                        <label>CEP</label>
+                        <!-- <div class="icon">
+                            <button class="ui-button icon flat" type="button" (click)="getCep(info.pagamento)" uiRipple [disabled]="campoCepCartao.errors || !campoCepCartao.dirty">
+                                <ui-progress-radial class="indeterminate primary" *ngIf="buscandoCep"></ui-progress-radial>
+                                <i class="material-icons">search</i>
+                            </button>
+                        </div> -->
+                        <div class="ui-messages">
+                            <div *ngIf="campoCepCartao.errors && campoCepCartao.dirty">
+                                <div class="ui-message error" [hidden]="!campoCepCartao.pristine && !campoCepCartao.errors.required">
+                                    CEP é obrigatório
+                                </div>
+                                <!-- <div class="ui-message error" [hidden]="!campoCepCartao.errors.parse && !campoCepCartao.hasError(['invalidCep'])">
+                                    CEP inválido
+                                </div> -->
+                            </div>
+                        </div>
+                    </ui-input-container>
+                    <ui-input-container>
+                        <ui-select #campoEstadoCartao="ngModel" name="campoEstadoCartao" [(ngModel)]="info.uf" [options]="estados" value="uf" label="nome"
+                            uiInput required [chosen]="true"></ui-select>
+                        <label>
+                            Estado
+                        </label>
+                        <div class="ui-messages">
+                            <div *ngIf="campoEstadoCartao.errors && campoEstadoCartao.dirty">
+                                <div class="ui-message error" [hidden]="!campoEstadoCartao.errors.required">
+                                    Estado é obrigatório
+                                </div>
+                            </div>
+                        </div>
+                    </ui-input-container>
+                </div>
+                <div class="ui-flex-container break-on-s600">
+                    <ui-input-container>
+                        <input #campoCidade="ngModel" type="text" [(ngModel)]="info.cidade" uiInput name="campoCidade" required uiMaxlength="50">
+                        <label>Cidade</label>
+                        <div class="ui-messages">
+                            <div *ngIf="campoCidade.errors && campoCidade.dirty">
+                                <div class="ui-message error" [hidden]="!campoCidade.pristine && !campoCidade.errors.required">
+                                    Cidade é obrigatória
+                                </div>
+                                <div class="ui-message counter error" [hidden]="!campoCidade.errors.uiMaxlength">
+                                    {{info.cidade ? info.cidade.length : 0}}/50
+                                </div>
+                            </div>
+                        </div>
+                    </ui-input-container>
+                    <ui-input-container>
+                        <input #campoLogradouro="ngModel" type="text" [(ngModel)]="info.logradouro" uiInput name="campoLogradouro"
+                            required uiMaxlength="70">
+                        <label>Logradouro</label>
+                        <div class="ui-messages">
+                            <div *ngIf="campoLogradouro.errors && campoLogradouro.dirty">
+                                <div class="ui-message error" [hidden]="!campoLogradouro.pristine && !campoLogradouro.errors.required">
+                                    Logradouro é obrigatório
+                                </div>
+                                <div class="ui-message counter error" [hidden]="!campoLogradouro.errors.uiMaxlength">
+                                    {{info.logradouro ? info.logradouro.length : 0}}/70
+                                </div>
+                            </div>
+                        </div>
+                    </ui-input-container>
+                </div>
+                <div class="ui-flex-container break-on-s600">
+                    <ui-input-container>
+                        <input #campoNumeroEnd="ngModel" type="text" [(ngModel)]="info.numero" uiInput name="campoNumeroEnd" required uiMaxlength="15">
+                        <label>Número</label>
+                        <div class="ui-messages">
+                            <div *ngIf="campoNumeroEnd.errors && campoNumeroEnd.dirty">
+                                <div class="ui-message error" [hidden]="!campoNumeroEnd.pristine && !campoNumeroEnd.errors.required">
+                                    Número é obrigatório
+                                </div>
+                                <div class="ui-message counter error" [hidden]="!campoNumeroEnd.errors.uiMaxlength">
+                                    {{info.numero ? info.numero.length : 0}}/15
+                                </div>
+                            </div>
+                        </div>
+                    </ui-input-container>
+
+                    <ui-input-container>
+                        <input #campoBairroCartao="ngModel" type="text" [(ngModel)]="info.bairro" uiInput name="campoBairroCartao" required
+                            uiMaxlength="50">
+                        <label>Bairro</label>
+                        <div class="ui-messages">
+                            <div *ngIf="campoBairroCartao.errors && campoBairroCartao.dirty">
+                                <div class="ui-message error" [hidden]="!campoBairroCartao.pristine && !campoBairroCartao.errors.required">
+                                    Bairro é obrigatório
+                                </div>
+                                <div class="ui-message counter error" [hidden]="!campoBairroCartao.errors.uiMaxlength">
+                                    {{info.bairro ? info.bairro.length : 0}}/50
+                                </div>
+                            </div>
+                        </div>
+                    </ui-input-container>
+                </div>
+
 
                 <div class="ui-fab-container">
                     <button class="ui-button accent fab" uiRipple>

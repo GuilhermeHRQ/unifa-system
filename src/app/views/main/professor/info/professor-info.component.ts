@@ -16,6 +16,7 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
     info: any;
     addingNew: boolean;
     index: number;
+    estados: any;
     listaProfessores: ListService;
     constructor(
         private titleService: Title,
@@ -27,6 +28,7 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
         private activedRoute: ActivatedRoute,
     ) {
         this.info = {};
+        this.estados = [];
     }
 
     ngOnInit() {
@@ -40,15 +42,17 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.addingNew = false;
             });
-            const res = this.listaProfessores.contains('codigo', this.activedRoute.snapshot.params['id']);
+            const res = this.listaProfessores.contains('cpf', this.activedRoute.snapshot.params['id']);
             this.info = res.element;
             this.index = res.index;
-            this.info.codigo = parseInt(this.info.codigo, 10);
+            // this.info.cpf = parseInt(this.info.cpf, 10);
         } else {
             setTimeout(() => {
                 this.addingNew = true;
             });
         }
+
+        this.getEstados();
     }
 
     ngOnDestroy() {
@@ -69,7 +73,7 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
         }
 
         if (!this.addingNew) {
-            this.listaProfessores.remove(this.listaProfessores.contains('codigo', this.info.codigo).index);
+            this.listaProfessores.remove(this.listaProfessores.contains('cpf', this.info.cpf).index);
         }
 
         this.listaProfessores.append(this.info);
@@ -105,5 +109,38 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
         });
 
         this.router.navigate(['professor']);
+    }
+
+
+    getEstados() {
+        this.estados = [
+            { uf: 'AC', nome: 'Acre' },
+            { uf: 'AL', nome: 'Alagoas' },
+            { uf: 'AP', nome: 'Amapá' },
+            { uf: 'AM', nome: 'Amazonas' },
+            { uf: 'BA', nome: 'Bahia' },
+            { uf: 'CE', nome: 'Ceará' },
+            { uf: 'DF', nome: 'Distrito Federal' },
+            { uf: 'ES', nome: 'Espírito Santo' },
+            { uf: 'GO', nome: 'Goiás' },
+            { uf: 'MA', nome: 'Maranhão' },
+            { uf: 'MT', nome: 'Mato Grosso' },
+            { uf: 'MS', nome: 'Mato Grosso do Sul' },
+            { uf: 'MG', nome: 'Minas Gerais' },
+            { uf: 'PA', nome: 'Pará' },
+            { uf: 'PB', nome: 'Paraíba' },
+            { uf: 'PR', nome: 'Paraná' },
+            { uf: 'PE', nome: 'Pernambuco' },
+            { uf: 'PI', nome: 'Piauí' },
+            { uf: 'RJ', nome: 'Rio de Janeiro' },
+            { uf: 'RN', nome: 'Rio Grande do Norte' },
+            { uf: 'RS', nome: 'Rio Grande do Sul' },
+            { uf: 'RO', nome: 'Rondônia' },
+            { uf: 'RR', nome: 'Roraima' },
+            { uf: 'SC', nome: 'Santa Catarina' },
+            { uf: 'SP', nome: 'São Paulo' },
+            { uf: 'SE', nome: 'Sergipe' },
+            { uf: 'TO', nome: 'Tocantins' }
+        ];
     }
 }
