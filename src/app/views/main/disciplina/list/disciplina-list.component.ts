@@ -42,9 +42,10 @@ export class DisciplinaListComponent implements OnInit {
 
 
         for (let i = 0; i < length; i++) {
-            const node = `<tr class="item-list" data-id="${itemList.element.cpf}">
-            <td data-title="Código" class="no-wrap">${this.convertCpf(itemList.element.cpf)}</td>
+            const node = `<tr class="item-list" data-id="${itemList.element.codigo}">
+            <td data-title="Código" class="no-wrap">${itemList.element.codigo}</td>
             <td data-title="Nome" class="no-wrap">${itemList.element.nome}</td>
+            <td data-title="Carga horária" class="no-wrap">${itemList.element.cargaHoraria}h</td>
             </tr>`;
             this.elementInsert.nativeElement.innerHTML += node;
             itemList = itemList.next;
@@ -57,7 +58,7 @@ export class DisciplinaListComponent implements OnInit {
     addFunction() {
         this.elementList.forEach(el => {
             UiElement.on(el, 'click', (e) => {
-                this.router.navigate(['disciplinas/' + e.target.parentElement.dataset.id]);
+                this.router.navigate(['disciplina/' + e.target.parentElement.dataset.id]);
             });
         });
     }

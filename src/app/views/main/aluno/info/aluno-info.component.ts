@@ -151,7 +151,6 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
 
 
     getCodigo() {
-        console.log(this.listaAluno);
         if (!this.listaAluno.size()) {
             this.info.codigo = 1000;
         } else {
@@ -159,7 +158,6 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
             while (current.next) {
                 current = current.next;
             }
-
             this.info.codigo = parseInt(current.element.codigo, 10) + 1;
         }
     }

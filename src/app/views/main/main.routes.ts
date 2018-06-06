@@ -10,6 +10,7 @@ import { AlunoListComponent } from './aluno/list/aluno-list.component';
 import { AlunoInfoComponent } from './aluno/info/aluno-info.component';
 import { DisciplinaComponent } from './disciplina/disciplina.component';
 import { DisciplinaListComponent } from './disciplina/list/disciplina-list.component';
+import { DisciplinaInfoComponent } from './disciplina/info/disciplina-info.component';
 
 export const MAIN_ROUTES: Routes = [{
     path: '',
@@ -41,9 +42,9 @@ export const MAIN_ROUTES: Routes = [{
             component: DisciplinaComponent,
             children: [
                 { path: '', component: DisciplinaListComponent },
-                // { path: 'nova', component: AlunoInfoComponent },
-                // { path: 'novo', redirectTo: 'nova' },
-                // { path: ':id', component: AlunoInfoComponent }
+                { path: 'nova', component: DisciplinaInfoComponent },
+                { path: 'novo', redirectTo: 'nova' },
+                { path: ':id', component: DisciplinaInfoComponent }
             ]
         },
     ]
