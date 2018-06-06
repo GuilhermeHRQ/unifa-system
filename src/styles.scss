@@ -3,7 +3,7 @@
 @import "~ng-smn-ui/core/theme";
 
 $primary: (color: 'indigo', hue: '500');
-$accent: (color: 'teal', hue: 'A200');
+$accent: (color: 'pink', hue: 'A200');
 
 $theme: ui-theme($primary, $accent);
 $theme-dark: ui-theme($primary, $accent, true);

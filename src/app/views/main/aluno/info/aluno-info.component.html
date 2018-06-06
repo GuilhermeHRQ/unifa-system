@@ -16,7 +16,7 @@
             <form #formAluno="ngForm" class="ui-validate on-dirty on-submit" (submit)="onSubmit(formAluno)">
                 <div class="ui-flex-container breake-on-s600">
                     <ui-input-container>
-                        <input #campoCodigo="ngModel" type="text" [(ngModel)]="info.codigo" name="campoCodigo" uiInput required uiMaskInteger>
+                        <input #campoCodigo="ngModel" type="text" [(ngModel)]="info.codigo" name="campoCodigo" uiInput required readonly>
                         <label>Código do aluno</label>
                         <div class="ui-messages">
                             <div *ngIf="campoCodigo.errors && campoCodigo.dirty">

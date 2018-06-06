@@ -7,13 +7,15 @@ import { ProfessorModule } from './professor/professor.module';
 import { ObjectService } from '../../core/utils/object.service';
 import { StorageService } from '../../core/utils/storage.service';
 import { AlunoModule } from './aluno/aluno.module';
+import { DisciplinaModule } from './disciplina/disciplina.module';
 
 @NgModule({
     imports: [
         SharedModule,
         HomeModule,
         ProfessorModule,
-        AlunoModule
+        AlunoModule,
+        DisciplinaModule
     ],
     exports: [],
     declarations: [MainComponent],

@@ -31,9 +31,9 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
         this.info = {};
         this.estados = [];
         this.cursos = [
-            {id: 1, nome: 'Sistemas de Informação'},
-            {id: 2, nome: 'Engenharia de Software'},
-            {id: 3, nome: 'Administração'},
+            { id: 1, nome: 'Sistemas de Informação' },
+            { id: 2, nome: 'Engenharia de Software' },
+            { id: 3, nome: 'Administração' },
         ];
     }
 
@@ -56,6 +56,7 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.addingNew = true;
             });
+            this.getCodigo();
         }
 
         this.getEstados();
@@ -146,5 +147,20 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
             { uf: 'SE', nome: 'Sergipe' },
             { uf: 'TO', nome: 'Tocantins' }
         ];
+    }
+
+
+    getCodigo() {
+        console.log(this.listaAluno);
+        if (!this.listaAluno.size()) {
+            this.info.codigo = 1000;
+        } else {
+            let current = this.listaAluno.getHead();
+            while (current.next) {
+                current = current.next;
+            }
+
+            this.info.codigo = parseInt(current.element.codigo, 10) + 1;
+        }
     }
 }

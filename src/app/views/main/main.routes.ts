@@ -8,6 +8,8 @@ import { ProfessorInfoComponent } from './professor/info/professor-info.componen
 import { AlunoComponent } from './aluno/aluno.component';
 import { AlunoListComponent } from './aluno/list/aluno-list.component';
 import { AlunoInfoComponent } from './aluno/info/aluno-info.component';
+import { DisciplinaComponent } from './disciplina/disciplina.component';
+import { DisciplinaListComponent } from './disciplina/list/disciplina-list.component';
 
 export const MAIN_ROUTES: Routes = [{
     path: '',
@@ -20,6 +22,7 @@ export const MAIN_ROUTES: Routes = [{
             children: [
                 { path: '', component: ProfessorListComponent },
                 { path: 'novo', component: ProfessorInfoComponent },
+                { path: 'nova', redirectTo: 'novo' },
                 { path: ':id', component: ProfessorInfoComponent }
             ]
         },
@@ -29,7 +32,18 @@ export const MAIN_ROUTES: Routes = [{
             children: [
                 { path: '', component: AlunoListComponent },
                 { path: 'novo', component: AlunoInfoComponent },
+                { path: 'nova', redirectTo: 'novo' },
                 { path: ':id', component: AlunoInfoComponent }
+            ]
+        },
+        {
+            path: 'disciplina',
+            component: DisciplinaComponent,
+            children: [
+                { path: '', component: DisciplinaListComponent },
+                // { path: 'nova', component: AlunoInfoComponent },
+                // { path: 'novo', redirectTo: 'nova' },
+                // { path: ':id', component: AlunoInfoComponent }
             ]
         },
     ]
