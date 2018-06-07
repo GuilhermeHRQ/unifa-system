@@ -39,8 +39,7 @@ export class DisciplinaListComponent implements OnInit {
     initList(list) {
         const length = list.size();
         let itemList = list.getHead();
-
-
+        
         for (let i = 0; i < length; i++) {
             const node = `<tr class="item-list" data-id="${itemList.element.codigo}">
             <td data-title="Código" class="no-wrap">${itemList.element.codigo}</td>
