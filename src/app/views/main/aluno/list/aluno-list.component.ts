@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ListService } from '../../../../core/utils/list.service';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement } from 'ng-smn-ui';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
     styleUrls: ['aluno-list.component.scss']
 })
 
-export class AlunoListComponent implements OnInit {
+export class AlunoListComponent implements OnInit, OnDestroy {
     listaAluno: ListService;
     elementList: any;
     cursos: Array<any>;
@@ -40,6 +40,10 @@ export class AlunoListComponent implements OnInit {
         this.listaAluno = new ListService();
         this.getInfo();
         this.initList(this.listaAluno);
+    }
+
+    ngOnDestroy(): void {
+        this.toolbarService.deactivateExtendedToolbar();
     }
 
     initList(list) {

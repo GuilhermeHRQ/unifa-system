@@ -74,6 +74,12 @@ export class MainComponent implements OnInit, AfterViewInit {
                 parentId: null,
                 url: '/aluno',
                 name: 'Alunos'
+            },
+            {
+                id: 3,
+                parentId: null,
+                url: '/disciplina',
+                name: 'Disciplinas'
             }
         ];
     }

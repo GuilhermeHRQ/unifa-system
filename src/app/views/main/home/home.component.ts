@@ -15,5 +15,8 @@ export class HomeComponent implements OnInit {
         private element: ElementRef) {
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.titleService.setTitle('Home');
+        this.toolbarService.set('UnifaSytem - Home');
+    }
 }

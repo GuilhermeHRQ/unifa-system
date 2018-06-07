@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ListService } from '../../../../core/utils/list.service';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement } from 'ng-smn-ui';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
     styleUrls: ['professor-list.component.scss']
 })
 
-export class ProfessorListComponent implements OnInit {
+export class ProfessorListComponent implements OnInit, OnDestroy {
     listaProfessores: ListService;
     elementList: any;
     @ViewChild('elementInsert') elementInsert;
@@ -35,13 +35,17 @@ export class ProfessorListComponent implements OnInit {
         this.initList(this.listaProfessores);
     }
 
+    ngOnDestroy(): void {
+        this.toolbarService.deactivateExtendedToolbar();
+    }
+
     initList(list) {
         const length = list.size();
         let itemList = list.getHead();
 
 
         for (let i = 0; i < length; i++) {
-            const node = `<tr class="item-list" data-id="${itemList.element.cpf}">
+            const node = `<tr class="item-list" data-id="${itemList.element.codigo}">
             <td data-title="Código" class="no-wrap">${this.convertCpf(itemList.element.cpf)}</td>
             <td data-title="Nome" class="no-wrap">${itemList.element.nome}</td>
             </tr>`;

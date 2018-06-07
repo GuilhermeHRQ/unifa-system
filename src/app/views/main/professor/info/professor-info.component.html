@@ -16,13 +16,16 @@
             <form #formProfessor="ngForm" class="ui-validate on-dirty on-submit" (submit)="onSubmit(formProfessor)">
                 <div class="ui-flex-container breake-on-s600">
                     <ui-input-container>
-                        <input #campoCpf="ngModel" type="text" [(ngModel)]="info.cpf" name="campoCpf" uiInput required uiMaskCpf>
+                        <input #campoCpf="ngModel" type="text" [(ngModel)]="info.cpf" name="campoCpf" (blur)="verificaCpf(info.cpf)" uiInput required
+                            uiMaskCpf>
                         <label>CPF</label>
                         <div class="ui-messages">
                             <div *ngIf="campoCpf.errors && campoCpf.dirty">
                                 <div class="ui-message error" [hidden]="!campoCpf.pristine && !campoCpf.errors.required">CPF é obrigatório
                                 </div>
                                 <div class="ui-message error" [hidden]="!campoCpf.errors.parse">Informe um CPF válido
+                                </div>
+                                <div class="ui-message error" [hidden]="!campoCpf.errors.cpfExistente">CPF já cadastrado
                                 </div>
                             </div>
                         </div>
@@ -94,6 +97,21 @@
                     </div>
                 </ui-input-container>
 
+                <ui-chips>
+                    <ui-input-container>
+                        <input #campoDisciplinas="ngModel" type="text" name="campoDisciplinas" [(ngModel)]="chips.search" uiInput uiAutocomplete
+                            (input)="loadChips()" (focus)="loadChips()" [list]="chips" [primary]="'nome'" [loading]="chips.loading"
+                            [select]="chipSelect.bind(this)">
+                        <label>Disciplinas</label>
+                    </ui-input-container>
+                    <div *ngFor="let selectedChip of info.disciplinas" class="ui-chip">
+                        {{selectedChip.nome}}
+                        <div class="close ripple-rounded" uiRipple (click)="removeChip(selectedChip)">
+                            <i class="material-icons">add_circle</i>
+                        </div>
+                    </div>
+                </ui-chips>
+
                 <ui-subheader>Endereço</ui-subheader>
 
                 <div class="ui-flex-container break-on-s600">
@@ -148,8 +166,7 @@
                         </div>
                     </ui-input-container>
                     <ui-input-container>
-                        <input #campoLogradouro="ngModel" type="text" [(ngModel)]="info.logradouro" uiInput name="campoLogradouro"
-                            required uiMaxlength="70">
+                        <input #campoLogradouro="ngModel" type="text" [(ngModel)]="info.logradouro" uiInput name="campoLogradouro" required uiMaxlength="70">
                         <label>Logradouro</label>
                         <div class="ui-messages">
                             <div *ngIf="campoLogradouro.errors && campoLogradouro.dirty">
@@ -180,8 +197,7 @@
                     </ui-input-container>
 
                     <ui-input-container>
-                        <input #campoBairroCartao="ngModel" type="text" [(ngModel)]="info.bairro" uiInput name="campoBairroCartao" required
-                            uiMaxlength="50">
+                        <input #campoBairroCartao="ngModel" type="text" [(ngModel)]="info.bairro" uiInput name="campoBairroCartao" required uiMaxlength="50">
                         <label>Bairro</label>
                         <div class="ui-messages">
                             <div *ngIf="campoBairroCartao.errors && campoBairroCartao.dirty">

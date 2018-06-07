@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ListService } from '../../../../core/utils/list.service';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement } from 'ng-smn-ui';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
     styleUrls: ['disciplina-list.component.scss']
 })
 
-export class DisciplinaListComponent implements OnInit {
+export class DisciplinaListComponent implements OnInit, OnDestroy {
     listaDisciplinas: ListService;
     elementList: any;
     @ViewChild('elementInsert') elementInsert;
@@ -34,6 +34,10 @@ export class DisciplinaListComponent implements OnInit {
         this.listaDisciplinas = new ListService();
         this.getInfo();
         this.initList(this.listaDisciplinas);
+    }
+
+    ngOnDestroy(): void {
+        this.toolbarService.deactivateExtendedToolbar();
     }
 
     initList(list) {

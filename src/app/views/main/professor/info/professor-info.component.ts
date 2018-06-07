@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement, UiSnackbar } from 'ng-smn-ui';
 import { ObjectService } from '../../../../core/utils/object.service';
@@ -17,7 +17,12 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
     addingNew: boolean;
     index: number;
     estados: any;
+    chips: any;
+    disciplinas: any;
+    selectedChips: any;
     listaProfessores: ListService;
+    listaDisciplinas: ListService;
+    @ViewChild('formProfessor') formProfessor;
     constructor(
         private titleService: Title,
         private toolbarService: UiToolbarService,
@@ -27,8 +32,11 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
         private router: Router,
         private activedRoute: ActivatedRoute,
     ) {
-        this.info = {};
+        this.info = { disciplinas: [] };
         this.estados = [];
+        this.chips = [];
+        this.disciplinas = [];
+        this.selectedChips = [];
     }
 
     ngOnInit() {
@@ -36,20 +44,36 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
         this.toolbarService.set('Cadastro de Professor');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaProfessores = new ListService();
-        this.getLista();
+        this.listaDisciplinas = new ListService();
+        this.getListaProfessores();
+        this.getListaDisciplinas().then(() => {
+            let current = this.listaDisciplinas.getHead();
+
+            for (let i = 0; i < this.listaDisciplinas.size(); i++) {
+                this.disciplinas.push(current.element);
+                current = current.next;
+            }
+
+            this.loadChips();
+        }, () => {
+            UiSnackbar.show({
+                text: 'Não foi possível carregar as disciplinas'
+            });
+            this.router.navigate(['professor']);
+        });
 
         if (this.activedRoute.snapshot.params['id']) {
             setTimeout(() => {
                 this.addingNew = false;
             });
-            const res = this.listaProfessores.contains('cpf', this.activedRoute.snapshot.params['id']);
+            const res = this.listaProfessores.contains('codigo', this.activedRoute.snapshot.params['id']);
             this.info = res.element;
             this.index = res.index;
-            // this.info.cpf = parseInt(this.info.cpf, 10);
         } else {
             setTimeout(() => {
                 this.addingNew = true;
             });
+            this.getCodigo();
         }
 
         this.getEstados();
@@ -73,7 +97,7 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
         }
 
         if (!this.addingNew) {
-            this.listaProfessores.remove(this.listaProfessores.contains('cpf', this.info.cpf).index);
+            this.listaProfessores.remove(this.listaProfessores.contains('codigo', this.info.codigo).index);
         }
 
         this.listaProfessores.append(this.info);
@@ -90,13 +114,27 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
 
     }
 
-    getLista() {
+    getListaProfessores() {
         const storage = this.storageService.getItem('professores');
         if (storage) {
             const objectStorage = JSON.parse(storage);
             this.listaProfessores.setHead(objectStorage);
             this.listaProfessores.setSize();
         }
+    }
+
+    getListaDisciplinas() {
+        return new Promise((resolve, reject) => {
+            const storage = this.storageService.getItem('disciplinas');
+            if (storage) {
+                const objectStorage = JSON.parse(storage);
+                this.listaDisciplinas.setHead(objectStorage);
+                this.listaDisciplinas.setSize();
+                resolve();
+            } else {
+                reject();
+            }
+        });
     }
 
     confirmDelete() {
@@ -142,5 +180,56 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
             { uf: 'SE', nome: 'Sergipe' },
             { uf: 'TO', nome: 'Tocantins' }
         ];
+    }
+
+    loadChips() {
+        const chips = JSON.parse(JSON.stringify(this.disciplinas));
+        this.info.disciplinas.forEach(selectedChip => {
+            chips.forEach((chip, i) => {
+                if (chip.codigo === selectedChip.codigo) {
+                    chips.splice(i, 1);
+                }
+            });
+        });
+
+        this.chips = chips;
+    }
+
+    chipSelect(chip) {
+        this.info.disciplinas.push(JSON.parse(JSON.stringify(chip)));
+        setTimeout(() => {
+            delete this.chips.search;
+        });
+    }
+
+    removeChip(chip) {
+        this.info.disciplinas.splice(this.info.disciplinas.indexOf(chip), 1);
+    }
+
+    verificaCpf(value) {
+        if (this.listaProfessores.size()) {
+            let current = this.listaProfessores.getHead();
+            for (let i = 0; i < this.listaProfessores.size(); i++) {
+                if ((!this.activedRoute.snapshot.params.id || current.element.codigo != this.activedRoute.snapshot.params.id) && current.element.cpf === value) {
+                    this.formProfessor.controls.campoCpf.setErrors({ cpfExistente: true });
+                    return false;
+                }
+                current = current.next;
+            }
+            this.formProfessor.controls.campoCpf.updateValueAndValidity();
+            return true;
+        }
+    }
+
+    getCodigo() {
+        if (!this.listaProfessores.size()) {
+            this.info.codigo = 1000;
+        } else {
+            let current = this.listaProfessores.getHead();
+            while (current.next) {
+                current = current.next;
+            }
+            this.info.codigo = parseInt(current.element.codigo, 10) + 1;
+        }
     }
 }
