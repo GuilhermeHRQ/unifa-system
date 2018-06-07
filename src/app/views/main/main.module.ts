@@ -8,6 +8,7 @@ import { ObjectService } from '../../core/utils/object.service';
 import { StorageService } from '../../core/utils/storage.service';
 import { AlunoModule } from './aluno/aluno.module';
 import { DisciplinaModule } from './disciplina/disciplina.module';
+import { CursoModule } from './curso/curso.module';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { DisciplinaModule } from './disciplina/disciplina.module';
         HomeModule,
         ProfessorModule,
         AlunoModule,
-        DisciplinaModule
+        DisciplinaModule,
+        CursoModule
     ],
     exports: [],
     declarations: [MainComponent],

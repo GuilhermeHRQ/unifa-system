@@ -8,13 +8,13 @@ import { element } from 'protractor';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'disciplina-list-component',
-    templateUrl: 'disciplina-list.component.html',
-    styleUrls: ['disciplina-list.component.scss']
+    selector: 'curso-list-component',
+    templateUrl: 'curso-list.component.html',
+    styleUrls: ['curso-list.component.scss']
 })
 
-export class DisciplinaListComponent implements OnInit, OnDestroy {
-    listaDisciplinas: ListService;
+export class CursoListComponent implements OnInit, OnDestroy {
+    listaCursos: ListService;
     elementList: any;
     @ViewChild('elementInsert') elementInsert;
     constructor(
@@ -27,13 +27,13 @@ export class DisciplinaListComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-        this.titleService.setTitle('UnfaSystem - Disciplinas');
-        this.toolbarService.set('Lista de disciplinas');
+        this.titleService.setTitle('UnfaSystem - Cursos');
+        this.toolbarService.set('Lista de cursos');
         this.toolbarService.activateExtendedToolbar(480);
 
-        this.listaDisciplinas = new ListService();
+        this.listaCursos = new ListService();
         this.getInfo();
-        this.initList(this.listaDisciplinas);
+        this.initList(this.listaCursos);
     }
 
     ngOnDestroy(): void {
@@ -48,7 +48,6 @@ export class DisciplinaListComponent implements OnInit, OnDestroy {
             const node = `<tr class="item-list" data-id="${itemList.element.codigo}">
             <td data-title="Código" class="no-wrap">${itemList.element.codigo}</td>
             <td data-title="Nome" class="no-wrap">${itemList.element.nome}</td>
-            <td data-title="Carga horária" class="no-wrap">${itemList.element.cargaHoraria}h</td>
             </tr>`;
             this.elementInsert.nativeElement.innerHTML += node;
             itemList = itemList.next;
@@ -61,17 +60,17 @@ export class DisciplinaListComponent implements OnInit, OnDestroy {
     addFunction() {
         this.elementList.forEach(el => {
             UiElement.on(el, 'click', (e) => {
-                this.router.navigate(['disciplina/' + e.target.parentElement.dataset.id]);
+                this.router.navigate(['curso/' + e.target.parentElement.dataset.id]);
             });
         });
     }
 
     getInfo() {
-        const storage = this.storageService.getItem('disciplinas');
+        const storage = this.storageService.getItem('cursos');
         if (storage) {
             const objectStorage = JSON.parse(storage);
-            this.listaDisciplinas.setHead(objectStorage);
-            this.listaDisciplinas.setSize();
+            this.listaCursos.setHead(objectStorage);
+            this.listaCursos.setSize();
         }
     }
 }
