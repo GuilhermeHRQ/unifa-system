@@ -5,6 +5,7 @@ import { ObjectService } from '../../../../core/utils/object.service';
 import { StorageService } from '../../../../core/utils/storage.service';
 import { ListService } from '../../../../core/utils/list.service';
 import { Router, Route, ActivatedRoute } from '@angular/router';
+import { ApiService } from '../../../../core/api/api.service';
 
 @Component({
     selector: 'professor-info-component',
@@ -20,6 +21,7 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
     chips: any;
     disciplinas: any;
     selectedChips: any;
+    buscandoCep: boolean;
     listaProfessores: ListService;
     listaDisciplinas: ListService;
     @ViewChild('formProfessor') formProfessor;
@@ -31,6 +33,7 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
         private element: ElementRef,
         private router: Router,
         private activedRoute: ActivatedRoute,
+        private api: ApiService
     ) {
         this.info = { disciplinas: [] };
         this.estados = [];
@@ -230,6 +233,35 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
                 current = current.next;
             }
             this.info.codigo = parseInt(current.element.codigo, 10) + 1;
+        }
+    }
+
+    getCep(form, value) {
+        if (!this.buscandoCep) {
+            this.buscandoCep = true;
+
+            this.api
+                .http('GET', `https://viacep.com.br/ws/${value}/json/`)
+                .call()
+                .subscribe((res) => {
+                    if (!res.erro) {
+                        this.info.bairro = res.bairro;
+                        this.info.logradouro = res.logradouro;
+                        this.info.uf = res.uf;
+                        this.info.cidade = res.localidade;
+                    } else {
+                        form.controls.campoCepCartao.setErrors({ invalidCep: true });
+                        this.info.bairro = '';
+                        this.info.logradouro = '';
+                        this.info.uf = null;
+                        this.info.cidade = '';
+                    }
+
+                }, (err) => {
+                    console.log(err);
+                }, () => {
+                    this.buscandoCep = false;
+                });
         }
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ListService } from '../../../../core/utils/list.service';
 import { Title } from '@angular/platform-browser';
-import { UiToolbarService, UiElement } from 'ng-smn-ui';
+import { UiToolbarService, UiElement, UiSnackbar } from 'ng-smn-ui';
 import { ObjectService } from '../../../../core/utils/object.service';
 import { StorageService } from '../../../../core/utils/storage.service';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 
 export class AlunoListComponent implements OnInit, OnDestroy {
     listaAluno: ListService;
+    listaCursos: ListService;
     elementList: any;
     cursos: Array<any>;
     @ViewChild('elementInsert') elementInsert;
@@ -25,11 +26,7 @@ export class AlunoListComponent implements OnInit, OnDestroy {
         private storageService: StorageService,
         private router: Router
     ) {
-        this.cursos = [
-            { id: 1, nome: 'Sistemas de Informação' },
-            { id: 2, nome: 'Engenharia de Software' },
-            { id: 3, nome: 'Administração' },
-        ];
+        this.cursos = [];
     }
 
     ngOnInit() {
@@ -38,8 +35,24 @@ export class AlunoListComponent implements OnInit, OnDestroy {
         this.toolbarService.activateExtendedToolbar(480);
 
         this.listaAluno = new ListService();
+        this.listaCursos = new ListService();
         this.getInfo();
-        this.initList(this.listaAluno);
+        this.getListaDisciplinas().then(() => {
+            let current = this.listaCursos.getHead();
+
+            for (let i = 0; i < this.listaCursos.size(); i++) {
+                this.cursos.push(current.element);
+                current = current.next;
+            }
+
+            this.initList(this.listaAluno);
+
+        }, () => {
+            UiSnackbar.show({
+                text: 'Não foi possível carregar os cursos'
+            });
+        });
+
     }
 
     ngOnDestroy(): void {
@@ -49,7 +62,6 @@ export class AlunoListComponent implements OnInit, OnDestroy {
     initList(list) {
         const length = list.size();
         let itemList = list.getHead();
-
 
         for (let i = 0; i < length; i++) {
             const node = `<tr class="item-list" data-id="${itemList.element.codigo}">
@@ -82,10 +94,24 @@ export class AlunoListComponent implements OnInit, OnDestroy {
         }
     }
 
-    getNomeCurso(id: number): any {
+    getListaDisciplinas() {
+        return new Promise((resolve, reject) => {
+            const storage = this.storageService.getItem('cursos');
+            if (storage) {
+                const objectStorage = JSON.parse(storage);
+                this.listaCursos.setHead(objectStorage);
+                this.listaCursos.setSize();
+                resolve();
+            } else {
+                reject();
+            }
+        });
+    }
+
+    getNomeCurso(codigo: number): any {
         let retorno = '';
         this.cursos.forEach(item => {
-            if (item.id === id) {
+            if (item.codigo == codigo) {
                 retorno = item.nome;
             }
         });

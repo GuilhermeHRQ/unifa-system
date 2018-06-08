@@ -172,7 +172,7 @@ export class CursoInfoComponent implements OnInit, OnDestroy {
 
     getCodigo() {
         if (!this.listaCursos.size()) {
-            this.info.codigo = '1000';
+            this.info.codigo = 1000;
         } else {
             let current = this.listaCursos.getHead();
             while (current.next) {

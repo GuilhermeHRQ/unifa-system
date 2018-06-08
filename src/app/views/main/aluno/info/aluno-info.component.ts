@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement, UiSnackbar } from 'ng-smn-ui';
 import { ObjectService } from '../../../../core/utils/object.service';
 import { StorageService } from '../../../../core/utils/storage.service';
 import { ListService } from '../../../../core/utils/list.service';
 import { Router, Route, ActivatedRoute } from '@angular/router';
+import { ApiService } from '../../../../core/api/api.service';
 
 @Component({
     selector: 'aluno-info-component',
@@ -17,8 +18,11 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
     addingNew: boolean;
     index: number;
     estados: any;
+    buscandoCep: boolean;
     cursos: Array<any>;
     listaAluno: ListService;
+    listaCursos: ListService;
+    @ViewChild('formAluno') formAluno;
     constructor(
         private titleService: Title,
         private toolbarService: UiToolbarService,
@@ -27,14 +31,11 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
         private element: ElementRef,
         private router: Router,
         private activedRoute: ActivatedRoute,
+        private api: ApiService
     ) {
         this.info = {};
         this.estados = [];
-        this.cursos = [
-            { id: 1, nome: 'Sistemas de Informação' },
-            { id: 2, nome: 'Engenharia de Software' },
-            { id: 3, nome: 'Administração' },
-        ];
+        this.cursos = [];
     }
 
     ngOnInit() {
@@ -42,24 +43,41 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
         this.toolbarService.set('Cadastro de Alunos');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaAluno = new ListService();
+        this.listaCursos = new ListService();
         this.getLista();
 
-        if (this.activedRoute.snapshot.params['id']) {
-            setTimeout(() => {
-                this.addingNew = false;
+        this.getListaDisciplinas().then(() => {
+            let current = this.listaCursos.getHead();
+
+            for (let i = 0; i < this.listaCursos.size(); i++) {
+                this.cursos.push(current.element);
+                current = current.next;
+            }
+        }, () => {
+            UiSnackbar.show({
+                text: 'Não foi possível carregar os cursos'
             });
-            const res = this.listaAluno.contains('codigo', this.activedRoute.snapshot.params['id']);
-            this.info = res.element;
-            this.index = res.index;
-            this.info.codigo = parseInt(this.info.codigo, 10);
-        } else {
-            setTimeout(() => {
-                this.addingNew = true;
-            });
-            this.getCodigo();
-        }
+            this.router.navigate(['aluno']);
+        });
 
         this.getEstados();
+
+        setTimeout(() => {
+            if (this.activedRoute.snapshot.params['id']) {
+                setTimeout(() => {
+                    this.addingNew = false;
+                });
+                const res = this.listaAluno.contains('codigo', this.activedRoute.snapshot.params['id']);
+                this.info = res.element;
+                this.index = res.index;
+                this.info.codigo = parseInt(this.info.codigo, 10);
+            } else {
+                setTimeout(() => {
+                    this.addingNew = true;
+                });
+                this.getCodigo();
+            }
+        });
     }
 
     ngOnDestroy() {
@@ -80,9 +98,8 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
         }
 
         if (!this.addingNew) {
-            this.listaAluno.remove(this.listaAluno.contains('cpf', this.info.cpf).index);
+            this.listaAluno.remove(this.listaAluno.contains('codigo', this.info.codigo).index);
         }
-
         this.listaAluno.append(this.info);
 
         const head = this.listaAluno.getHead();
@@ -149,6 +166,20 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
         ];
     }
 
+    getListaDisciplinas() {
+        return new Promise((resolve, reject) => {
+            const storage = this.storageService.getItem('cursos');
+            if (storage) {
+                const objectStorage = JSON.parse(storage);
+                this.listaCursos.setHead(objectStorage);
+                this.listaCursos.setSize();
+                resolve();
+            } else {
+                reject();
+            }
+        });
+    }
+
 
     getCodigo() {
         if (!this.listaAluno.size()) {
@@ -159,6 +190,50 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
                 current = current.next;
             }
             this.info.codigo = parseInt(current.element.codigo, 10) + 1;
+        }
+    }
+
+    getCep(form, value) {
+        if (!this.buscandoCep) {
+            this.buscandoCep = true;
+
+            this.api
+                .http('GET', `https://viacep.com.br/ws/${value}/json/`)
+                .call()
+                .subscribe((res) => {
+                    if (!res.erro) {
+                        this.info.bairro = res.bairro;
+                        this.info.logradouro = res.logradouro;
+                        this.info.uf = res.uf;
+                        this.info.cidade = res.localidade;
+                    } else {
+                        form.controls.campoCepCartao.setErrors({ invalidCep: true });
+                        this.info.bairro = '';
+                        this.info.logradouro = '';
+                        this.info.uf = null;
+                        this.info.cidade = '';
+                    }
+
+                }, (err) => {
+                    console.log(err);
+                }, () => {
+                    this.buscandoCep = false;
+                });
+        }
+    }
+
+    verificaCpf(value) {
+        if (this.listaAluno.size()) {
+            let current = this.listaAluno.getHead();
+            for (let i = 0; i < this.listaAluno.size(); i++) {
+                if ((!this.activedRoute.snapshot.params.id || current.element.codigo != this.activedRoute.snapshot.params.id) && current.element.cpf === value) {
+                    this.formAluno.controls.campoCpf.setErrors({ cpfExistente: true });
+                    return false;
+                }
+                current = current.next;
+            }
+            this.formAluno.controls.campoCpf.updateValueAndValidity();
+            return true;
         }
     }
 }

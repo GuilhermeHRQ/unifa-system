@@ -29,7 +29,8 @@
                     </ui-input-container>
 
                     <ui-input-container>
-                        <input #campoCpf="ngModel" type="text" [(ngModel)]="info.cpf" name="campoCpf" uiInput required uiMaskCpf>
+                        <input #campoCpf="ngModel" type="text" [(ngModel)]="info.cpf" name="campoCpf" (blur)="verificaCpf(info.cpf)" uiInput required
+                            uiMaskCpf>
                         <label>CPF</label>
                         <div class="ui-messages">
                             <div *ngIf="campoCpf.errors && campoCpf.dirty">
@@ -37,9 +38,12 @@
                                 </div>
                                 <div class="ui-message error" [hidden]="!campoCpf.errors.parse">Informe um CPF válido
                                 </div>
+                                <div class="ui-message error" [hidden]="!campoCpf.errors.cpfExistente">CPF já cadastrado
+                                </div>
                             </div>
                         </div>
                     </ui-input-container>
+
                 </div>
 
                 <ui-input-container>
@@ -59,11 +63,13 @@
                 </ui-input-container>
 
                 <ui-input-container>
-                    <input #campoEmail="ngModel" type="text" [(ngModel)]="info.email" name="campoEmail" uiInput required uiMaxlength="252">
+                    <input #campoEmail="ngModel" type="text" [(ngModel)]="info.email" name="campoEmail" uiInput required uiMaxlength="252" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                     <label>Email</label>
                     <div class="ui-messages">
                         <div *ngIf="campoEmail.errors && campoEmail.dirty">
                             <div class="ui-message error" [hidden]="!campoEmail.pristine && !campoEmail.errors.required">Email é obrigatório
+                            </div>
+                            <div class="ui-message error" [hidden]="!campoEmail.pristine && !campoEmail.errors.pattern">Informe um email válido
                             </div>
                             <div class="ui-message error" [hidden]="!campoEmail.errors.uiMaxlength">Email não pode conter mais de 252 caracteres.
                             </div>
@@ -79,11 +85,11 @@
                             required>
                         <label>Data de Nascimento</label>
                         <div class="ui-messages">
-                            <div *ngIf="campoNome.errors && campoNome.dirty">
-                                <div class="ui-message error" [hidden]="!campoNome.pristine && !campoNome.errors.required">
+                            <div *ngIf="DataNascimento.errors && DataNascimento.dirty">
+                                <div class="ui-message error" [hidden]="!DataNascimento.errors.required">
                                     Data de nascimento é obrigatória
                                 </div>
-                                <div class="ui-message error" [hidden]="!campoNome.pristine && !campoNome.errors.parse">
+                                <div class="ui-message error" [hidden]="!DataNascimento.errors.parse">
                                     Informe uma data válida
                                 </div>
                             </div>
@@ -96,8 +102,8 @@
                     </ui-input-container>
 
                     <ui-input-container>
-                        <ui-select #campoCurso="ngModel" name="campoCurso" [(ngModel)]="info.curso" [options]="cursos" value="id" label="nome"
-                            uiInput required [chosen]="true"></ui-select>
+                        <ui-select #campoCurso="ngModel" name="campoCurso" [(ngModel)]="info.curso" [options]="cursos" [value]="'codigo'" [label]="'nome'"
+                            uiInput required [chosen]="cursos.length > 10"></ui-select>
                         <label>
                             Curso
                         </label>
@@ -115,22 +121,22 @@
 
                 <div class="ui-flex-container break-on-s600">
                     <ui-input-container>
-                        <input #campoCepCartao="ngModel" type="text" [(ngModel)]="info.cep" uiInput name="campoCepCartao" uiMaskCep required>
+                        <input #campoCepCartao="ngModel" type="text" [(ngModel)]="info.cep" uiInput name="campoCepCartao" uiMaskCep required (blur)="getCep(formAluno, info.cep)">
                         <label>CEP</label>
-                        <!-- <div class="icon">
-                            <button class="ui-button icon flat" type="button" (click)="getCep(info.pagamento)" uiRipple [disabled]="campoCepCartao.errors || !campoCepCartao.dirty">
+                        <div class="icon">
+                            <button class="ui-button icon flat" type="button" (click)="getCep(formAluno, info.cep)" uiRipple [disabled]="campoCepCartao.errors || !campoCepCartao.dirty">
                                 <ui-progress-radial class="indeterminate primary" *ngIf="buscandoCep"></ui-progress-radial>
                                 <i class="material-icons">search</i>
                             </button>
-                        </div> -->
+                        </div>
                         <div class="ui-messages">
                             <div *ngIf="campoCepCartao.errors && campoCepCartao.dirty">
                                 <div class="ui-message error" [hidden]="!campoCepCartao.pristine && !campoCepCartao.errors.required">
                                     CEP é obrigatório
                                 </div>
-                                <!-- <div class="ui-message error" [hidden]="!campoCepCartao.errors.parse && !campoCepCartao.hasError(['invalidCep'])">
+                                <div class="ui-message error" [hidden]="!campoCepCartao.errors.parse && !campoCepCartao.hasError(['invalidCep'])">
                                     CEP inválido
-                                </div> -->
+                                </div>
                             </div>
                         </div>
                     </ui-input-container>
