@@ -39,7 +39,7 @@ export class CursoInfoComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.titleService.setTitle('UnifaSytem - Cursos');
+        this.titleService.setTitle('UnifaSystem - Cursos');
         this.toolbarService.set('Cadastro de cursos');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaCursos = new ListService();

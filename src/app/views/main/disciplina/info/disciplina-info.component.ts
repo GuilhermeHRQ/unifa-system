@@ -33,7 +33,7 @@ export class DisciplinaInfoComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.titleService.setTitle('UnifaSytem - Disciplinas');
+        this.titleService.setTitle('UnifaSystem - Disciplinas');
         this.toolbarService.set('Cadastro de Disciplinas');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaDisciplinas = new ListService();

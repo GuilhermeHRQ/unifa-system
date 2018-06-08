@@ -43,7 +43,7 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.titleService.setTitle('UnifaSytem - Professor');
+        this.titleService.setTitle('UnifaSystem - Professor');
         this.toolbarService.set('Cadastro de Professor');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaProfessores = new ListService();

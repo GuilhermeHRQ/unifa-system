@@ -39,7 +39,7 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.titleService.setTitle('UnifaSytem - Alunos');
+        this.titleService.setTitle('UnifaSystem - Alunos');
         this.toolbarService.set('Cadastro de Alunos');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaAluno = new ListService();
