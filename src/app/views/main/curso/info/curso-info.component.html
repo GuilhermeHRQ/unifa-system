@@ -74,7 +74,7 @@
                 </ui-chips>
 
                 <ui-input-container>
-                    <textarea [(ngModel)]="info.descricao" name="campoDescricao" autosize rows="2" uiInput required uiMaxlength="250" #campoDescricao="ngModel"></textarea>
+                    <textarea [(ngModel)]="info.descricao" name="campoDescricao" rows="4" uiInput required uiMaxlength="250" #campoDescricao="ngModel"></textarea>
                     <label>Descrição</label>
                     <div class="ui-messages">
                         <div *ngIf="campoDescricao.errors && campoDescricao.dirty">

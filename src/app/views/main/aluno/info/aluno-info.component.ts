@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement, UiSnackbar } from 'ng-smn-ui';
-import { ObjectService } from '../../../../core/utils/object.service';
 import { StorageService } from '../../../../core/utils/storage.service';
 import { ListService } from '../../../../core/utils/list.service';
 import { Router, Route, ActivatedRoute } from '@angular/router';
@@ -26,7 +25,6 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
     constructor(
         private titleService: Title,
         private toolbarService: UiToolbarService,
-        private objectService: ObjectService,
         private storageService: StorageService,
         private element: ElementRef,
         private router: Router,
@@ -40,7 +38,7 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.titleService.setTitle('UnifaSystem - Alunos');
-        this.toolbarService.set('Cadastro de Alunos');
+        this.toolbarService.set('Alunos');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaAluno = new ListService();
         this.listaCursos = new ListService();
@@ -123,9 +121,14 @@ export class AlunoInfoComponent implements OnInit, OnDestroy {
 
     confirmDelete() {
         this.listaAluno.remove(this.index);
-        const head = this.listaAluno.getHead();
-        this.storageService.setNewItem('alunos', JSON.stringify(head));
 
+        if (!this.listaAluno.size()) {
+            this.storageService.removeItem('alunos');
+        } else {
+            const head = this.listaAluno.getHead();
+            this.storageService.setNewItem('alunos', JSON.stringify(head));
+        }
+        
         UiSnackbar.show({
             text: 'Aluno removido com sucesso'
         });

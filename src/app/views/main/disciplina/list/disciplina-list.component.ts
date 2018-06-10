@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { ListService } from '../../../../core/utils/list.service';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement } from 'ng-smn-ui';
-import { ObjectService } from '../../../../core/utils/object.service';
 import { StorageService } from '../../../../core/utils/storage.service';
 import { element } from 'protractor';
 import { Router } from '@angular/router';
@@ -21,7 +20,6 @@ export class DisciplinaListComponent implements OnInit, OnDestroy {
         private titleService: Title,
         private toolbarService: UiToolbarService,
         private element: ElementRef,
-        private objectService: ObjectService,
         private storageService: StorageService,
         private router: Router
     ) { }

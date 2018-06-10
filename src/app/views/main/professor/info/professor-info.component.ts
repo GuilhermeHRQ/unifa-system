@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement, UiSnackbar } from 'ng-smn-ui';
-import { ObjectService } from '../../../../core/utils/object.service';
 import { StorageService } from '../../../../core/utils/storage.service';
 import { ListService } from '../../../../core/utils/list.service';
 import { Router, Route, ActivatedRoute } from '@angular/router';
@@ -28,7 +27,6 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
     constructor(
         private titleService: Title,
         private toolbarService: UiToolbarService,
-        private objectService: ObjectService,
         private storageService: StorageService,
         private element: ElementRef,
         private router: Router,
@@ -44,7 +42,7 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.titleService.setTitle('UnifaSystem - Professor');
-        this.toolbarService.set('Cadastro de Professor');
+        this.toolbarService.set('Professores');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaProfessores = new ListService();
         this.listaDisciplinas = new ListService();
@@ -142,9 +140,14 @@ export class ProfessorInfoComponent implements OnInit, OnDestroy {
 
     confirmDelete() {
         this.listaProfessores.remove(this.index);
-        const head = this.listaProfessores.getHead();
-        this.storageService.setNewItem('professores', JSON.stringify(head));
 
+        if(!this.listaProfessores.size()) {
+            this.storageService.removeItem('professores');
+        } else {
+            const head = this.listaProfessores.getHead();
+            this.storageService.setNewItem('professores', JSON.stringify(head));
+        }
+        
         UiSnackbar.show({
             text: 'Professor removido com sucesso'
         });

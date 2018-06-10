@@ -39,7 +39,6 @@ export class MainComponent implements OnInit, AfterViewInit {
         this.toolbarService.set('');
         this.menuOpen = false;
         this.toolbarService.registerMainToolbar(document.getElementById('app-header'));
-
         /**
          * Descomentar o código para deixar o menu persistente
          * const isNavDrawerPersistent = UiCookie.get('NavDrawerPersistent') === 'true';
@@ -66,27 +65,27 @@ export class MainComponent implements OnInit, AfterViewInit {
             {
                 id: 1,
                 parentId: null,
-                url: '/professor',
-                name: 'Professores'
-            },
-            {
-                id: 2,
-                parentId: null,
-                url: '/aluno',
-                name: 'Alunos'
-            },
-            {
-                id: 3,
-                parentId: null,
                 url: '/disciplina',
                 name: 'Disciplinas'
             },
             {
-                id: 4,
+                id: 2,
                 parentId: null,
                 url: '/curso',
                 name: 'Cursos'
-            }
+            },
+            {
+                id: 3,
+                parentId: null,
+                url: '/professor',
+                name: 'Professores'
+            },
+            {
+                id: 4,
+                parentId: null,
+                url: '/aluno',
+                name: 'Alunos'
+            },
         ];
     }
 }

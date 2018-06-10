@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { UiToolbarService, UiElement, UiSnackbar } from 'ng-smn-ui';
-import { ObjectService } from '../../../../core/utils/object.service';
 import { StorageService } from '../../../../core/utils/storage.service';
 import { ListService } from '../../../../core/utils/list.service';
 import { Router, Route, ActivatedRoute } from '@angular/router';
@@ -22,7 +21,6 @@ export class DisciplinaInfoComponent implements OnInit, OnDestroy {
     constructor(
         private titleService: Title,
         private toolbarService: UiToolbarService,
-        private objectService: ObjectService,
         private storageService: StorageService,
         private element: ElementRef,
         private router: Router,
@@ -34,7 +32,7 @@ export class DisciplinaInfoComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.titleService.setTitle('UnifaSystem - Disciplinas');
-        this.toolbarService.set('Cadastro de Disciplinas');
+        this.toolbarService.set('Disciplinas');
         this.toolbarService.activateExtendedToolbar(600);
         this.listaDisciplinas = new ListService();
         this.getLista();
@@ -99,11 +97,16 @@ export class DisciplinaInfoComponent implements OnInit, OnDestroy {
 
     confirmDelete() {
         this.listaDisciplinas.remove(this.index);
-        const head = this.listaDisciplinas.getHead();
-        this.storageService.setNewItem('disciplinas', JSON.stringify(head));
 
+        if(!this.listaDisciplinas.size()) {
+            this.storageService.removeItem('disciplinas');
+        } else {
+            const head = this.listaDisciplinas.getHead();
+            this.storageService.setNewItem('disciplinas', JSON.stringify(head));
+        }
+        
         UiSnackbar.show({
-            text: 'Disciplina removido com sucesso'
+            text: 'Disciplina removida com sucesso'
         });
 
         this.router.navigate(['disciplina']);
